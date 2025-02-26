@@ -1,0 +1,96 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API de Cartões de Transporte",
+    "description": "API para gerenciar cartões de transporte público utilizando PostgreSQL e Sequelize"
+  },
+  "paths": {
+    "/api/cartoes": {
+      "get": {
+        "summary": "Listar cartões",
+        "responses": {
+          "200": { "description": "Lista de cartões" }
+        }
+      },
+      "post": {
+        "summary": "Criar um novo cartão",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "cartao",
+            "schema": { "$ref": "#/definitions/cartoes" }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Cartão criado" }
+        }
+      }
+    },
+    "/api/cartoes/{numero}": {
+      "get": {
+        "summary": "Buscar cartão pelo número",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Cartão encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar o saldo do cartão",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "saldo",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "saldo": { "type": "number" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Saldo atualizado" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar um cartão",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Cartão removido" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "cartoes": {
+      "type": "object",
+      "properties": {
+        "numero": { "type": "string" },
+        "saldo": { "type": "number" },
+        "usuario": { "type": "string" },
+        "dataExpiracao": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

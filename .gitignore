@@ -1,0 +1,40 @@
+# Dependências do Node.js
+/node_modules/
+
+# Arquivos de log
+*.log
+
+# Arquivos de configuração locais
+.env
+
+# Diretórios de build
+/dist/
+/build/
+/tmp/
+
+# Arquivos de backup de editores
+*.swp
+*.swo
+*.bak
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos de testes
+coverage/
+
+# Arquivos de cache do npm
+.npm/
+
+# Arquivos gerados pelo Sequelize CLI (se estiver usando)
+sequelize-meta.json
+
+# Outros arquivos do sistema operacional
+.idea/
+
+# Compilação de TypeScript
+*.tsbuildinfo
