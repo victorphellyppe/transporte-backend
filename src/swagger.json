@@ -30,6 +30,9 @@
                 },
                 "email": {
                   "type": "string"
+                },
+                "cartao_id": {
+                  "type": "number"
                 }
               }
             }
