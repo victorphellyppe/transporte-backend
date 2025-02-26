@@ -6,6 +6,7 @@ interface UsuarioAttributes {
   id: number;
   nome: string;
   email: string;
+  cartao_id?: number; // Adicionando o campo cartao_id, que pode ser nulo ou fornecido
 }
 
 interface UsuarioCreationAttributes extends Optional<UsuarioAttributes, 'id'> {}
@@ -14,6 +15,7 @@ class Usuario extends Model<UsuarioAttributes, UsuarioCreationAttributes> implem
   public id!: number;
   public nome!: string;
   public email!: string;
+  public cartao_id?: number; // Adicionando o campo cartao_id
 }
 
 Usuario.init(
@@ -32,6 +34,10 @@ Usuario.init(
       allowNull: false,
       unique: true,
     },
+    cartao_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true, // O campo cartao_id pode ser nulo
+    },
   },
   {
     sequelize,
@@ -40,8 +46,9 @@ Usuario.init(
   }
 );
 
-// Definição da relação
-Usuario.hasMany(Cartao, { foreignKey: 'usuario_id' });
-Cartao.belongsTo(Usuario, { foreignKey: 'usuario_id' });
+// Definição da relação: Um usuário pode ter um cartão
+Usuario.belongsTo(Cartao, { foreignKey: 'cartao_id' }); // Relacionamento com Cartao
+
+Cartao.hasMany(Usuario, { foreignKey: 'cartao_id' }); // Um cartão pode estar associado a vários usuários
 
 export default Usuario;

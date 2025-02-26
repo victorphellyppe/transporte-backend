@@ -1,14 +1,6 @@
 import express from 'express';
-import sequelize from './config/db'; // Importação correta
-import usuarioRoutes from './routes/usuario.routes';
-import './models'; // Garante que as associações dos models sejam carregadas
-
-const app = express();
-
-app.use(express.json());
-
-// Definindo a rota dos usuários
-app.use('/api/usuarios', usuarioRoutes);
+import sequelize from './config/db'; // Conexão com o banco de dados
+import app from './app'; // Importando o app.ts
 
 // Sincronizar o banco de dados (opcional)
 sequelize.sync()

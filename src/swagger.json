@@ -1,95 +1,207 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
     "title": "API de Cartões de Transporte",
-    "description": "API para gerenciar cartões de transporte público utilizando PostgreSQL e Sequelize"
+    "description": "API para gerenciar cartões de transporte público",
+    "version": "1.0.0"
   },
   "paths": {
-    "/api/cartoes": {
+    "/api/usuarios": {
       "get": {
-        "summary": "Listar cartões",
+        "summary": "Lista todos os usuários",
         "responses": {
-          "200": { "description": "Lista de cartões" }
+          "200": {
+            "description": "Lista de usuários"
+          }
         }
       },
       "post": {
-        "summary": "Criar um novo cartão",
+        "summary": "Cria um novo usuário",
         "parameters": [
           {
+            "name": "usuario",
             "in": "body",
-            "name": "cartao",
-            "schema": { "$ref": "#/definitions/cartoes" }
-          }
-        ],
-        "responses": {
-          "201": { "description": "Cartão criado" }
-        }
-      }
-    },
-    "/api/cartoes/{numero}": {
-      "get": {
-        "summary": "Buscar cartão pelo número",
-        "parameters": [
-          {
-            "name": "numero",
-            "in": "path",
             "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": { "description": "Cartão encontrado" }
-        }
-      },
-      "put": {
-        "summary": "Atualizar o saldo do cartão",
-        "parameters": [
-          {
-            "name": "numero",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "in": "body",
-            "name": "saldo",
             "schema": {
               "type": "object",
               "properties": {
-                "saldo": { "type": "number" }
+                "nome": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                }
               }
             }
           }
         ],
         "responses": {
-          "200": { "description": "Saldo atualizado" }
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "400": {
+            "description": "E-mail já cadastrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      }
+    },
+    "/api/cartoes": {
+      "post": {
+        "summary": "Cria um novo cartão",
+        "parameters": [
+          {
+            "name": "cartao",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "numero": {
+                  "type": "string",
+                  "description": "Número do cartão"
+                },
+                "saldo": {
+                  "type": "number",
+                  "description": "Saldo inicial do cartão"
+                }
+              },
+              "required": ["numero", "saldo"]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cartão criado com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
         }
       },
-      "delete": {
-        "summary": "Deletar um cartão",
+      "get": {
+        "summary": "Lista todos os cartões",
+        "responses": {
+          "200": {
+            "description": "Lista de cartões",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "numero": {
+                    "type": "string"
+                  },
+                  "saldo": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cartoes/{numero}": {
+      "get": {
+        "summary": "Busca um cartão específico pelo número",
         "parameters": [
           {
             "name": "numero",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Número do cartão"
           }
         ],
         "responses": {
-          "200": { "description": "Cartão removido" }
+          "200": {
+            "description": "Cartão encontrado",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "numero": {
+                  "type": "string"
+                },
+                "saldo": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cartão não encontrado"
+          }
         }
-      }
-    }
-  },
-  "definitions": {
-    "cartoes": {
-      "type": "object",
-      "properties": {
-        "numero": { "type": "string" },
-        "saldo": { "type": "number" },
-        "usuario": { "type": "string" },
-        "dataExpiracao": { "type": "string", "format": "date" }
+      },
+      "put": {
+        "summary": "Atualiza o saldo de um cartão específico",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Número do cartão"
+          },
+          {
+            "name": "saldo",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "saldo": {
+                  "type": "number",
+                  "description": "Novo saldo do cartão"
+                }
+              },
+              "required": ["saldo"]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Saldo atualizado com sucesso"
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "404": {
+            "description": "Cartão não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deleta um cartão específico pelo número",
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Número do cartão"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cartão deletado com sucesso"
+          },
+          "404": {
+            "description": "Cartão não encontrado"
+          },
+          "500": {
+            "description": "Erro interno do servidor"
+          }
+        }
       }
     }
   }
